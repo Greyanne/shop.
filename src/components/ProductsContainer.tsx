@@ -90,7 +90,7 @@ const ProductsContainer: React.FC = () => {
         onIonInput={handleSearch}
         onIonClear={handleClear}
         show-clear-button="focus"
-        className="w-full p-0"
+        className="w-full p-0 max-w-[980px] mx-auto"
       ></IonSearchbar>
       {searchValue && (
         <p className="text-sm italic">
@@ -105,7 +105,7 @@ const ProductsContainer: React.FC = () => {
         <EmptyContainer />
       ) : (
         <div>
-          <IonGrid className="p-0 mx-auto">
+          <IonGrid className="p-0 my-5 mx-auto max-w-[980px]">
             <IonRow className="grid grid-cols-products justify-start py-4 gap-4">
               {data.map((product, index) => (
                 <IonCard
