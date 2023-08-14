@@ -17,6 +17,7 @@ import { cart, heart, heartOutline } from "ionicons/icons";
 import Loader from "./Loader";
 import EmptyContainer from "./EmptyContainer";
 import ImageComponent from "./ImageComponent";
+import { CartContext } from "../context/cart_context";
 
 export interface Product {
   title: string;
@@ -32,11 +33,15 @@ const ProductsContainer: React.FC = () => {
   const [data, setData] = useState<Product[] | []>([...products]);
   const [searchValue, setSearchValue] = useState("");
   const [loading, setLoading] = useState(false);
+  const { addToCart } = useContext(CartContext);
 
   const handleAddToCart = (
-    e: React.MouseEvent<HTMLIonButtonElement, MouseEvent>
+    e: React.MouseEvent<HTMLIonButtonElement, MouseEvent>,
+    id: number
   ) => {
+    e.preventDefault();
     e.stopPropagation();
+    addToCart(id);
   };
 
   const handleClear = () => {
@@ -105,7 +110,9 @@ const ProductsContainer: React.FC = () => {
               {data.map((product, index) => (
                 <IonCard
                   key={index}
-                  routerLink={`/preview/${product.id}`}
+                  href={`/preview/${product.id}`}
+                  // onClick={(e) => e.preventDefault()}
+                  // routerLink={`/preview/${product.id}`}
                   className="flex flex-col p-0 m-0 mx-auto justify-between gap-4 max-w-[300px] xs:min-w-[MIN(120px, 50%)] cursor-pointer"
                 >
                   <ImageComponent product={product} />
@@ -122,8 +129,8 @@ const ProductsContainer: React.FC = () => {
 
                     <IonButton
                       color={"white"}
-                      onClick={handleAddToCart}
-                      className="hidden sm:block z-10 font-medium normal-case tracking-tight min-w-fit max-w-fit rounded-lg flex-1 h-5 self-center text-black bg-[whitesmoke]"
+                      onClick={(e) => handleAddToCart(e, product.id)}
+                      className="hidden sm:block z-50 font-medium normal-case tracking-tight min-w-fit max-w-fit rounded-lg flex-1 h-5 self-center text-black bg-[whitesmoke]"
                     >
                       Add to cart
                     </IonButton>

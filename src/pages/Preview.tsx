@@ -33,9 +33,6 @@ const PreviewPage: React.FC<PreviewPageProps> = ({ match }) => {
   };
 
   useEffect(() => {
-    // if (product) {
-    //   return;
-    // }
     setShowLoading(true);
     fetchSingleProduct(Number(id))
       .then((res) => {
@@ -43,7 +40,7 @@ const PreviewPage: React.FC<PreviewPageProps> = ({ match }) => {
         setShowLoading(false);
       })
       .catch((error) => console.log("error fetching product", error));
-  }, [product, id]);
+  }, [id]);
 
   useEffect(() => {
     return () => {
@@ -60,7 +57,7 @@ const PreviewPage: React.FC<PreviewPageProps> = ({ match }) => {
       <IonHeader>
         <IonToolbar>
           <IonTitle className="whitespace-normal">
-            {product && product.title}
+            Product
           </IonTitle>
         </IonToolbar>
       </IonHeader>
@@ -68,7 +65,7 @@ const PreviewPage: React.FC<PreviewPageProps> = ({ match }) => {
         <IonHeader collapse="condense" className="py-0 mb-2 ">
           <IonToolbar>
             <IonTitle size="large" className="whitespace-normal">
-              {product && product.title}
+              Product
             </IonTitle>
           </IonToolbar>
         </IonHeader>

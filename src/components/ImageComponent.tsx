@@ -5,7 +5,7 @@ import { heartOutline } from "ionicons/icons";
 import { CartContext } from "../context/cart_context";
 import { Product } from "./ProductsContainer";
 
-const ImageComponent: React.FC<{product: Product}> = ({product}) => {
+const ImageComponent: React.FC<{ product: Product }> = ({ product }) => {
   const { addToCart } = useContext(CartContext);
 
   const [loading, setLoading] = useState(true);
@@ -14,9 +14,13 @@ const ImageComponent: React.FC<{product: Product}> = ({product}) => {
     setLoading(false);
   };
 
-  const handleAddToCart = () => {
-    addToCart(product.id)
-  }
+  const handleAddToCart = (
+    e: React.MouseEvent<HTMLIonIconElement, MouseEvent>
+  ) => {
+    e.preventDefault()
+    e.stopPropagation();
+    addToCart(product.id);
+  };
 
   return (
     <div className="relative">
@@ -38,7 +42,7 @@ const ImageComponent: React.FC<{product: Product}> = ({product}) => {
           icon={heartOutline}
           id="heart-icon"
           size="small"
-          className="p-2 m-auto"
+          className="p-2 m-auto z-50"
           onClick={handleAddToCart}
         />
       </div>
