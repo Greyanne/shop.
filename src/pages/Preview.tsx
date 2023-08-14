@@ -33,9 +33,9 @@ const PreviewPage: React.FC<PreviewPageProps> = ({ match }) => {
   };
 
   useEffect(() => {
-    if (product) {
-      return;
-    }
+    // if (product) {
+    //   return;
+    // }
     setShowLoading(true);
     fetchSingleProduct(Number(id))
       .then((res) => {
