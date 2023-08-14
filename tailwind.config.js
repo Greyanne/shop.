@@ -9,7 +9,7 @@ export default {
       },
       gridTemplateColumns: {
         // Simple 16 column grid
-        products: `repeat(auto-fill, minmax(MIN(46%,301px),1fr))`,
+        products: `repeat(auto-fill, minmax(MIN(33%,301px),1fr))`,
       },
     },
   },

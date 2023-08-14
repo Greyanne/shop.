@@ -12,13 +12,13 @@ import { getGreeting } from "../utils/greeting";
 
 const Home: React.FC = () => {
   return (
-    <IonPage className="lg:px-10 max-w-[1440px] mx-auto">
+    <IonPage className="max-w-[1440px] mx-auto">
       {/* <IonHeader>
         <IonToolbar>
           <IonTitle>{getGreeting()}, welcome</IonTitle>
         </IonToolbar>
       </IonHeader> */}
-      <IonContent fullscreen className="px-10">
+      <IonContent fullscreen className="px-2">
         <IonHeader collapse="condense" translucent className="py-0 my-10 mb-5">
           <IonToolbar>
             <IonTitle size="large" className="break-words">
