@@ -1,14 +1,14 @@
 import { IonIcon, IonImg, IonRippleEffect } from "@ionic/react";
-import { useContext, useEffect, useState } from "react";
-import ImageLoader from "./ImageLoader";
+import { useState } from "react";
 import { heartOutline } from "ionicons/icons";
-import { CartContext } from "../context/cart_context";
-import { Product } from "./ProductsContainer";
+import { addItem } from "../redux/features/cart/cartSlice";
+import { Product } from "../types";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../redux/store";
 
 const ImageComponent: React.FC<{ product: Product }> = ({ product }) => {
-  const { addToCart } = useContext(CartContext);
-
   const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleImageOnLoad = () => {
     setLoading(false);
@@ -17,19 +17,22 @@ const ImageComponent: React.FC<{ product: Product }> = ({ product }) => {
   const handleAddToCart = (
     e: React.MouseEvent<HTMLIonIconElement, MouseEvent>
   ) => {
-    e.preventDefault()
+    e.preventDefault();
     e.stopPropagation();
-    addToCart(product.id);
+    product.id && dispatch(addItem(product.id));
   };
 
   return (
     <div className="relative">
       <IonImg
         alt="Silhouette of mountains"
-        src={product?.image}
+        src={
+          product?.image ||
+          "https://ionicframework.com/docs/img/demos/card-media.png"
+        }
         onIonImgWillLoad={() => setLoading(true)}
         onIonImgDidLoad={handleImageOnLoad}
-        className="aspect-[5/6] min-h-[180px] min-w-[171px] m-auto bg-white rounded object-center object-contain p-2"
+        className="aspect-[5/6] min-h-[180px] min-w-[140px] m-auto bg-white rounded object-center object-contain p-2"
       />
       {/* <ImageLoader setShowLoading={setLoading} showLoading={loading} /> */}
       <div

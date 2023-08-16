@@ -32,19 +32,24 @@ import "@ionic/react/css/display.css";
 /* Theme variables */
 import "./theme/variables.css";
 
+/* Custom styles */
+import "./theme/app.css";
+
 /* Tailwind */
 import "./theme/tailwind.css";
+
 import Home from "./pages/Home";
 import Cart from "./pages/Cart";
 import PreviewPage from "./pages/Preview";
-import { useContext } from "react";
-import { CartContext } from "./context/cart_context";
+import { useEffect, useState } from "react";
+import store, { RootState } from "./redux/store";
+import { useSelector } from "react-redux";
+import Checkout from "./pages/Checkout";
 
 setupIonicReact();
 
 const App: React.FC = () => {
-  const { count } = useContext(CartContext);
-
+  const cartCount = useSelector((state: RootState) => state.cart.count);
   return (
     <IonApp>
       <IonReactRouter>
@@ -56,6 +61,9 @@ const App: React.FC = () => {
             <Route exact path="/preview/:id" component={PreviewPage} />
             <Route exact path="/cart">
               <Cart />
+            </Route>
+            <Route path="/checkout">
+              <Checkout />
             </Route>
             <Route path="/tab3">
               <Tab3 />
@@ -80,7 +88,7 @@ const App: React.FC = () => {
                 className="relative"
               />
               <div className="absolute flex justify-center items-center rounded-full p-0 top-0 ml-5 h-4 w-4 left-19 bg-red-400 text-red-white">
-                <p className="text-white m-0 p-0">{count}</p>
+                <p className="text-white m-0 p-0">{cartCount}</p>
               </div>
               <IonLabel>Cart</IonLabel>
             </IonTabButton>

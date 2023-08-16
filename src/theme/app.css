@@ -1,0 +1,16 @@
+.ripple-parent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  position: relative;
+  overflow: hidden;
+
+  border: 1px solid #ddd;
+
+  user-select: none;
+}
+
+.rounded-rectangle {
+  border-radius: 8px;
+}

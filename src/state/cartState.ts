@@ -1,5 +1,3 @@
-import { Product } from "../components/ProductsContainer";
-
 export interface CartState {
   products: any[];
   count: number;
