@@ -1,13 +1,18 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import baseUrl from "../../../utils/baseUrl";
-import productApi from "../../../utils/productApi";
-import axios from "axios";
-import { Product } from "../../../types";
+import { ContactDetails, Product } from "../../../types";
 import { RootState } from "../../store";
+
+interface Order {
+  products: Product[];
+  deliveryDetails: ContactDetails;
+  date: Date;
+}
 
 export interface CartState {
   products: any[];
+  orders: any[];
   count: number;
   loading: boolean;
   error: string;
@@ -15,6 +20,7 @@ export interface CartState {
 
 export const initialState = {
   products: [],
+  orders: [],
   count: 0,
   loading: false,
   error: "",
@@ -29,12 +35,9 @@ export const addItem = createAsyncThunk(
     const existingProduct = products?.find(
       (product) => product.id === productId
     );
-
     if (existingProduct) {
-      console.log('Found existing product')
       return existingProduct;
     } else {
-      console.log('Creating a new product')
       return await baseUrl
         .get(`${productId}`)
         .then((response) => response.data);
@@ -46,8 +49,7 @@ const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-
-    'decrementItem': (state, action: PayloadAction<number>) => {
+    decrementItem: (state, action: PayloadAction<number>) => {
       const existingProduct = state.products.find(
         (product) => product.id == action.payload
       );
@@ -76,14 +78,31 @@ const cartSlice = createSlice({
         state.count -= 1;
       }
     },
-    'deleteItem': (state, action: PayloadAction<number>) => {
+    deleteItem: (state, action: PayloadAction<number>) => {
       const product = state.products.find((v) => v.id == action.payload);
       state.products = state.products.filter((v) => v.id !== product.id);
       state.count -= product.count;
     },
-    'clearCart': (state) => {
+    clearCart: (state) => {
       state.products = [];
       state.count = 0;
+    },
+    checkout: (
+      state,
+      action: PayloadAction<{ products: Product[]; contact: ContactDetails }>
+    ) => {
+      const { products, contact } = action.payload;
+      const date = new Date();
+      const order = {
+        products,
+        deliveryDetails: contact,
+        date: date.toISOString(),
+      };
+
+      state.orders = [...state.orders, order];
+      state.products = [];
+      state.count = 0;
+      console.log("checkout completed see order: ", { order });
     },
   },
   extraReducers: (builder) => {
@@ -128,6 +147,6 @@ const cartSlice = createSlice({
   },
 });
 
-export const { decrementItem, deleteItem, clearCart } =
+export const { decrementItem, deleteItem, clearCart, checkout } =
   cartSlice.actions;
 export default cartSlice.reducer;

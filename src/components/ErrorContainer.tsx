@@ -13,7 +13,7 @@ const ErrorContainer: React.FC<Props> = ({ message }) => {
       <IonButton
         href="/"
         color={"medium"}
-        className="rounded-lg p-2 px-4 normal-case leading-tighter"
+        className="rounded-lg tracking-tight h-12 leading-10 p-2 px-4 normal-case leading-tighter"
       >
         Try again
       </IonButton>

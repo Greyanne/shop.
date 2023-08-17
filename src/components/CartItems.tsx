@@ -12,12 +12,31 @@ import { add, closeOutline, remove } from "ionicons/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store";
 
-
 import {
   addItem,
   deleteItem,
   decrementItem,
 } from "../redux/features/cart/cartSlice";
+import CustomLoading from "./CustomLoading";
+import { useState } from "react";
+
+const CartImage: React.FC<{ src: string }> = ({ src }) => {
+  const [loading, setLoading] = useState(true);
+  const handleImageOnLoad = () => {
+    setLoading(false);
+  };
+  return (
+    <div className="aspect-[6/7] p-4 bg-white xs:w-full w-[max(40%,110px)] max-w-[130px] relative flex justify-center items-center">
+      <IonImg
+        onIonImgWillLoad={() => setLoading(true)}
+        onIonImgDidLoad={handleImageOnLoad}
+        src={src || "https://ionicframework.com/docs/img/demos/card-media.png"}
+        className="rounded object-center object-contain p-2"
+      />
+      <CustomLoading isOpen={loading} />
+    </div>
+  );
+};
 
 const CartItems = () => {
   const cartItems = useSelector((state: RootState) => state.cart.products);
@@ -37,7 +56,7 @@ const CartItems = () => {
     <div className="flex flex-wrap w-full md:max-w-[60%] lg:max-w-[48%] justify-start gap-2 m-0 my-2 mx-0">
       {cartItems.map((product, index) => (
         <IonCard key={index} className="flex gap-1 w-full m-0 p-0 relative">
-          <div className="aspect-[6/7] p-4 bg-white xs:w-full w-[max(40%,110px)] max-w-[130px] flex justify-center items-center">
+          {/* <div className="aspect-[6/7] p-4 bg-white xs:w-full w-[max(40%,110px)] max-w-[130px] relative flex justify-center items-center">
             <IonImg
               src={
                 product.image ||
@@ -45,7 +64,9 @@ const CartItems = () => {
               }
               className="rounded object-center object-contain p-2"
             />
-          </div>
+           
+          </div> */}
+          <CartImage src={product.image} />
 
           <IonCardContent className="py-4 px-2 m-0 flex flex-col gap-3">
             <IonCardSubtitle className="m-0 p-0 text-xl sm:text-xl font-bold text-ellipsis normal-case">
@@ -63,9 +84,7 @@ const CartItems = () => {
               >
                 <IonIcon icon={remove}></IonIcon>
               </IonButton>
-              <IonText className="text-sm p-1 px-2">
-                {product.count}
-              </IonText>
+              <IonText className="text-sm p-1 px-2">{product.count}</IonText>
               <IonButton
                 onClick={() => handleIncrementItem(product.id)}
                 color="medium"

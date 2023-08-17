@@ -5,8 +5,9 @@ import { addItem } from "../redux/features/cart/cartSlice";
 import { Product } from "../types";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../redux/store";
+import CustomLoading from "./CustomLoading";
 
-const ImageComponent: React.FC<{ product: Product }> = ({ product }) => {
+const ImageComponent: React.FC<{ product: Product}> = ({ product}) => {
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch<AppDispatch>();
 
@@ -34,7 +35,7 @@ const ImageComponent: React.FC<{ product: Product }> = ({ product }) => {
         onIonImgDidLoad={handleImageOnLoad}
         className="aspect-[5/6] min-h-[180px] min-w-[140px] m-auto bg-white rounded object-center object-contain p-2"
       />
-      {/* <ImageLoader setShowLoading={setLoading} showLoading={loading} /> */}
+      <CustomLoading isOpen={loading} />
       <div
         aria-label="Add to cart"
         aria-describedby="heart-icon"

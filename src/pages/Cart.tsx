@@ -8,8 +8,6 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import ExploreContainer from "../components/ExploreContainer";
-import "./Cart.css";
 import OrderSummary from "../components/OrderSummary";
 import CartItems from "../components/CartItems";
 import { useSelector } from "react-redux";
@@ -43,7 +41,7 @@ const Cart: React.FC = () => {
               <OrderSummary />
               <Link
                 to="/checkout"
-                className="ion-activatable ripple-parent w-full max-w-xs rounded-rectangle border mx-auto md:ml-2 md:mr-auto my-4 flex items-center justify-between p-2 rounded-lg normal-case h-12 font-medium tracking-tight"
+                className="ion-activatable ripple-parent w-full max-w-xs rounded-rectangle border mx-auto my-4 flex items-center justify-between p-2 rounded-lg normal-case h-12 font-medium tracking-tight"
               >
                 <IonText>Proceed to Checkout</IonText>
                 <IonIcon

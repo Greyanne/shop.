@@ -1,52 +1,27 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-
-export interface CardDetails {
-  cvv: string;
-  expirationDate: string;
-  cardNumber: string;
-  cardHolderName: string;
-}
-
-export interface ContactDetails {
-  name: string;
-  email: string;
-  phone: number | string;
-  address: {
-    city: string;
-    country: string;
-  };
-}
-
-export interface CheckoutState {
-  contact: ContactDetails;
-  card: CardDetails;
-  hasContact: boolean;
-  hasCard: boolean;
-  loading: boolean;
-  error: string;
-}
+import { CardDetails, CheckoutState, ContactDetails } from "../../../types";
 
 const initialContactState = {
-  name: "Fav",
-  email: "example@gmail.com",
-  phone: "123",
+  name: "",
+  email: "",
+  phone: "",
   address: {
-    city: "Enugu",
-    country: "Nigeria",
+    city: "",
+    country: "",
   },
 };
 
-// const initialCardState = {
-//   cvv: "",
-//   expiryMonth: "",
-//   expiryYear: "",
-//   cardNumber: "",
-// };
+const initialCardState = {
+  cvv: '',
+  expirationDate: '',
+  cardNumber: '',
+  cardHolderName: '',
+};
 
 export const initialState = {
-  contact: { ...initialContactState }, //as ContactDetails ,//initialContactState,
-  card: {}, //initialCardState,
+  contact: initialContactState, //as ContactDetails ,//initialContactState,
+  card: initialCardState,
   hasContact: false,
   hasCard: false,
   loading: false,
@@ -57,19 +32,30 @@ const CheckoutSlice = createSlice({
   name: "Checkout",
   initialState,
   reducers: {
-    'addContactDetails': (state, action: PayloadAction<ContactDetails>) => {
+    addContactDetails: (state, action: PayloadAction<ContactDetails>) => {
       state.contact = action.payload;
       state.hasContact = true;
-      console.log("Adding contact details::: ", action.payload);
     },
-    'addCardDetails': (state, action: PayloadAction<CardDetails>) => {
-      console.log("Adding card details::: ", action.payload);
+    addCardDetails: (state, action: PayloadAction<CardDetails>) => {
       state.card = action.payload;
       state.hasCard = true;
+    },
+    removeContactDetails: (state) => {
+      state.contact = initialContactState
+      state.hasContact = false;
+    },
+    removeCardDetails: (state) => {
+      state.card = initialCardState
+      state.hasCard = false;
     },
   },
 });
 
-export const { addCardDetails, addContactDetails } = CheckoutSlice.actions;
+export const {
+  addCardDetails,
+  addContactDetails,
+  removeContactDetails,
+  removeCardDetails,
+} = CheckoutSlice.actions;
 
 export default CheckoutSlice.reducer;

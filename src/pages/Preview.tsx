@@ -5,16 +5,15 @@ import {
   IonLabel,
   IonNote,
   IonPage,
-  IonText,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { useContext, useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import { RouteComponentProps } from "react-router";
 import Loader from "../components/Loader";
 import ImageComponent from "../components/ImageComponent";
 import baseUrl from "../utils/baseUrl";
-import store, { AppDispatch } from "../redux/store";
+import  { AppDispatch } from "../redux/store";
 import { addItem } from "../redux/features/cart/cartSlice";
 import { Product } from "../types";
 import { useDispatch } from "react-redux";

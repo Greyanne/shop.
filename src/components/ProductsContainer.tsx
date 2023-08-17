@@ -81,7 +81,7 @@ const ProductsContainer: React.FC = () => {
       )}
 
       {loading ? (
-        <Loader showLoading={loading} infinite={true} />
+        <Loader showLoading={loading} />
       ) : error ? (
         <>
           <EmptyContainer message={error} />

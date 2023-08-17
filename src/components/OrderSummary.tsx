@@ -1,18 +1,12 @@
 import {
-  IonButton,
-  IonIcon,
   IonItem,
   IonItemGroup,
   IonLabel,
   IonNote,
-  IonRippleEffect,
-  IonText,
 } from "@ionic/react";
 import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import { arrowForward } from "ionicons/icons";
-import { Link } from "react-router-dom";
 
 const OrderSummary = () => {
   const { products, count } = useSelector((state: RootState) => state.cart);

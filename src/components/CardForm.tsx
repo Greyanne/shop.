@@ -18,9 +18,10 @@ import { AppDispatch, RootState } from "../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import FormHeader from "./FormHeader";
 import {
-  CardDetails,
   addCardDetails,
+  removeCardDetails,
 } from "../redux/features/checkout/checkoutSlice";
+import { CardDetails } from "../types";
 
 const CardValidationSchema = Yup.object().shape({
   cardNumber: Yup.string()
@@ -39,12 +40,18 @@ const CardValidationSchema = Yup.object().shape({
 });
 
 const CardForm = () => {
-  const { card, hasContact } = useSelector(
+  const { card, hasContact, hasCard } = useSelector(
     (state: RootState) => state.checkout
   );
   const dispatch = useDispatch<AppDispatch>();
   const [isSaved, setIsSaved] = useState(false);
   const [toggle, setToggle] = useState(true);
+
+  const handleRemoveCardDetails = (resetform: any) => {
+    dispatch(removeCardDetails());
+    resetform();
+    setIsSaved(false);
+  };
 
   const handleSubmit = (values: CardDetails) => {
     console.log(values);
@@ -76,14 +83,14 @@ const CardForm = () => {
         breakpoints={[0, 0.25, 0.75]}
         handleBehavior="cycle"
       >
-        <IonContent className="ion-padding">
+        <IonContent className="ion-padding mx-auto">
           <Formik
             initialValues={card}
             validationSchema={CardValidationSchema}
             onSubmit={handleSubmit}
           >
             {(formik) => (
-              <Form className="grid items-baseline w-[95%] py-2 mx-auto md:max-w-[380px] md:ml-0">
+              <Form className="grid items-baseline w-[95%] py-2 mx-auto md:max-w-[380px]">
                 <FormHeader
                   title={"Card Details"}
                   icon={false}
@@ -123,18 +130,27 @@ const CardForm = () => {
                     label="CVV"
                     type="number"
                   />
-                  {!isSaved && (
+
+                  <IonButton
+                    fill="solid"
+                    expand="block"
+                    type="submit"
+                    color="medium"
+                    disabled={isSaved}
+                    className="relative tracking-tight h-12 leading-10 gap-4 w-full rounded-sm px-2 mx-0 normal-case"
+                  >
+                    {hasCard && isSaved ? "Saved" : "Save"}
+                  </IonButton>
+
+                  {hasCard && (
                     <IonButton
-                      fill="solid"
+                      fill="outline"
                       expand="block"
-                      type="submit"
-                      color="medium"
-                      disabled={isSaved}
-                      className="relative gap-4 w-full rounded-sm px-2 mx-0 normal-case"
+                      onClick={() => handleRemoveCardDetails(formik.resetForm)}
+                      color={"medium"}
+                      className="relative tracking-tight h-12 leading-10 gap-4 w-full rounded-sm px-2 mx-0 normal-case"
                     >
-                      <IonText className="flex p-0 px-4 py-2 m-0">
-                        {isSaved ? "Saved" : "Save"}
-                      </IonText>
+                      Remove card
                     </IonButton>
                   )}
                 </div>

@@ -1,20 +1,16 @@
-import {
-  IonButton,
-  IonContent,
-  IonModal,
-  IonText,
-} from "@ionic/react";
+import { IonButton, IonContent, IonModal, IonText } from "@ionic/react";
 import { Form, Formik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import { AppDispatch, RootState } from "../redux/store";
 import {
-  ContactDetails,
   addContactDetails,
+  removeContactDetails,
 } from "../redux/features/checkout/checkoutSlice";
 import FormHeader from "./FormHeader";
 import { useState } from "react";
 import CustomInput from "./CustomInput";
+import { ContactDetails } from "../types";
 
 const ContactFormValidation = Yup.object().shape({
   name: Yup.string().required("Enter fullname"),
@@ -33,13 +29,18 @@ const ContactForm = () => {
   const { contact, hasContact } = useSelector(
     (state: RootState) => state.checkout
   );
+
   const dispatch = useDispatch<AppDispatch>();
   const [toggle, setToggle] = useState(true);
   const [isSaved, setIsSaved] = useState(false);
 
+  const handleRemoveContactDetails = (resetForm: any) => {
+    dispatch(removeContactDetails());
+    resetForm();
+    setIsSaved(false);
+  };
   const handleSubmit = (values: ContactDetails) => {
     dispatch(addContactDetails(values));
-    console.log(values);
     setIsSaved(true);
   };
 
@@ -113,18 +114,28 @@ const ContactForm = () => {
                     label="Country"
                   />
 
-                  {!isSaved && (
+                  <IonButton
+                    fill="solid"
+                    expand="block"
+                    type="submit"
+                    color={"medium"}
+                    disabled={isSaved}
+                    className="relative tracking-tight h-12 leading-10 gap-4 w-full rounded-sm px-2 mx-0 normal-case"
+                  >
+                    {isSaved ? "Saved" : "Save"}
+                  </IonButton>
+
+                  {hasContact && (
                     <IonButton
                       fill="solid"
                       expand="block"
-                      type="submit"
+                      onClick={() =>
+                        handleRemoveContactDetails(formik.resetForm)
+                      }
                       color={"medium"}
-                      disabled={isSaved}
-                      className="relative gap-4 w-full rounded-sm px-2 mx-0 normal-case"
+                      className="relative tracking-tight h-12 leading-10 gap-4 w-full rounded-sm px-2 mx-0 normal-case"
                     >
-                      <IonText className="flex p-0 px-4 py-2 m-0">
-                        {isSaved ? "Saved" : "Save"}
-                      </IonText>
+                      Remove contact details
                     </IonButton>
                   )}
                 </div>

@@ -45,6 +45,7 @@ import { useEffect, useState } from "react";
 import store, { RootState } from "./redux/store";
 import { useSelector } from "react-redux";
 import Checkout from "./pages/Checkout";
+import CartLayout from "./pages/CartLayout";
 
 setupIonicReact();
 
@@ -55,22 +56,12 @@ const App: React.FC = () => {
       <IonReactRouter>
         <IonTabs>
           <IonRouterOutlet>
-            <Route exact path="/home">
-              <Home />
-            </Route>
+            <Route exact path="/home" component={Home}/>
             <Route exact path="/preview/:id" component={PreviewPage} />
-            <Route exact path="/cart">
-              <Cart />
-            </Route>
-            <Route path="/checkout">
-              <Checkout />
-            </Route>
-            <Route path="/tab3">
-              <Tab3 />
-            </Route>
-            <Route exact path="/">
-              <Redirect to="/home" />
-            </Route>
+            <Route exact path="/cart" component={Cart} />
+            <Route exact path="/checkout" component={Checkout} />
+            <Route path="/tab3" component={Tab3}/>
+            <Route exact path="/" component={Home}/>
           </IonRouterOutlet>
 
           <IonTabBar
