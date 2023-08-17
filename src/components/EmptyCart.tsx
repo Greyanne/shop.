@@ -2,8 +2,7 @@ import "./ExploreContainer.css";
 
 const EmptyCart: React.FC = () => {
   return (
-    <div className="container">
-      {/* <strong>{name}</strong> */}
+    <div className="container mx-auto">
       <p>
        You have no item in your cart
       </p>

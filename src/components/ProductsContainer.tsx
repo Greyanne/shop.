@@ -3,17 +3,18 @@ import React, { useEffect, useState } from "react";
 import Loader from "./Loader";
 import ProductGallery from "./ProductGallery";
 import { Product } from "../types";
-import store from "../redux/store";
+import store, { RootState } from "../redux/store";
 import { fetchProducts } from "../redux/features/store/storeSlice";
+import { useSelector } from "react-redux";
+import EmptyContainer from "./ErrorContainer";
 
 const ProductsContainer: React.FC = () => {
   const [products, setProducts] = useState<Product[] | []>([]);
   const [data, setData] = useState<Product[] | []>([]);
   const [searchValue, setSearchValue] = useState("");
-  const [loading, setLoading] = useState(false);
+  const { loading, error } = useSelector((state: RootState) => state.shop);
 
   const handleClear = () => {
-    setLoading(true);
     setData([...products]);
     setSearchValue("");
   };
@@ -26,7 +27,7 @@ const ProductsContainer: React.FC = () => {
   };
 
   const handleSearch = (event: Event) => {
-    setLoading(true);
+    // setLoading(true);
     let query = "";
     const target = event.target as HTMLIonSearchbarElement;
     if (target) {
@@ -36,7 +37,7 @@ const ProductsContainer: React.FC = () => {
   };
 
   useEffect(() => {
-    if (products&& products.length>0) {
+    if (products && products.length > 0) {
       setData([...products]);
     } else {
       store.dispatch(fetchProducts());
@@ -80,7 +81,11 @@ const ProductsContainer: React.FC = () => {
       )}
 
       {loading ? (
-        <Loader setShowLoading={setLoading} showLoading={loading} />
+        <Loader showLoading={loading} infinite={true} />
+      ) : error ? (
+        <>
+          <EmptyContainer message={error} />
+        </>
       ) : (
         <ProductGallery data={data} />
       )}

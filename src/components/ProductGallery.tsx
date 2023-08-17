@@ -10,7 +10,7 @@ import {
 import React from "react";
 import ImageComponent from "./ImageComponent";
 import store, { AppDispatch } from "../redux/store";
-import EmptyContainer from "./EmptyContainer";
+import EmptyContainer from "./ErrorContainer";
 import { Product } from "../types";
 import { addItem } from "../redux/features/cart/cartSlice";
 import { Link } from "react-router-dom";

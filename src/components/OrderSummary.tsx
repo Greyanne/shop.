@@ -39,18 +39,6 @@ const OrderSummary = () => {
           </IonNote>
         </IonItem>
       </IonItemGroup>
-      <Link
-        to="/checkout"
-        className="ion-activatable ripple-parent rounded-rectangle border mx-2 my-4 flex items-center justify-between p-2 rounded-lg normal-case h-12 font-medium tracking-tight"
-      >
-        <IonText>Proceed to Checkout</IonText>
-        <IonIcon
-          size="small"
-          icon={arrowForward}
-          className="ml-auto p-2 bg-white text-black rounded"
-        ></IonIcon>
-        <IonRippleEffect></IonRippleEffect>
-      </Link>
     </div>
   );
 };

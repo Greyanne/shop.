@@ -1,28 +1,39 @@
-import { IonIcon } from "@ionic/react";
-import { arrowDown, arrowUp } from "ionicons/icons";
+import { IonButton, IonIcon, IonText } from "@ionic/react";
+import {
+  arrowDown,
+  arrowUp,
+  checkmark,
+  checkmarkDoneCircle,
+  ellipseOutline,
+} from "ionicons/icons";
 import React from "react";
 
 interface Props {
   title: string;
+  icon?: boolean;
+  variant?: boolean;
   isActive?: boolean;
   isDisabled?: boolean;
   toggle?: () => void;
 }
 
-const FormHeader: React.FC<Props> = ({
-  title,
-  toggle,
-  isDisabled,
-  isActive,
-}) => {
+const FormHeader: React.FC<Props> = ({ title, icon = true, variant }) => {
   return (
-    <div onClick={toggle} className="w-full flex justify-between py-3 px-1 cursor-pointer">
-      <h1 className="">{title}</h1>
-      <IonIcon
-        size="small"
-        icon={isDisabled || isActive ? arrowDown : arrowUp}
-        className="flex p-0 m-0"
-      ></IonIcon>
+    <div
+      className={`${
+        !icon ? "justify-center" : "justify-between"
+      } flex items-center p-3 border-b `}
+    >
+      <IonText>{title}</IonText>
+      {icon && (
+        <IonIcon
+          size="small"
+          slot="start"
+          color={variant ? "success" : "medium"}
+          icon={variant ? checkmarkDoneCircle : ellipseOutline}
+          className="flex p-0 m-0"
+        ></IonIcon>
+      )}
     </div>
   );
 };

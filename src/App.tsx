@@ -87,9 +87,11 @@ const App: React.FC = () => {
                 icon={cartOutline}
                 className="relative"
               />
-              <div className="absolute flex justify-center items-center rounded-full p-0 top-0 ml-5 h-4 w-4 left-19 bg-red-400 text-red-white">
-                <p className="text-white m-0 p-0">{cartCount}</p>
-              </div>
+              {cartCount > 0 && (
+                <div className="absolute flex justify-center items-center rounded-full p-0 top-0 ml-5 h-4 w-4 left-19 bg-red-400 text-red-white">
+                  <p className="text-white m-0 p-0">{cartCount}</p>
+                </div>
+              )}
               <IonLabel>Cart</IonLabel>
             </IonTabButton>
             <IonTabButton tab="tab3" href="/tab3">

@@ -1,139 +1,139 @@
 import {
   IonButton,
-  IonInput,
-  IonRippleEffect,
-  IonRow,
+  IonContent,
+  IonModal,
   IonText,
 } from "@ionic/react";
-import { useFormik } from "formik";
+import { Form, Formik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import { AppDispatch, RootState } from "../redux/store";
-import { ContactDetails, addContactDetails } from "../redux/features/checkout/checkoutSlice";
+import {
+  ContactDetails,
+  addContactDetails,
+} from "../redux/features/checkout/checkoutSlice";
+import FormHeader from "./FormHeader";
+import { useState } from "react";
+import CustomInput from "./CustomInput";
 
-const initialContactState = {
-  name: "",
-  email: "",
-  phone: "",
-  address: {
-    city: "",
-    country: "",
-  },
-};
+const ContactFormValidation = Yup.object().shape({
+  name: Yup.string().required("Enter fullname"),
+  email: Yup.string().email("Enter a valid email").required("Enter email"),
+  phone: Yup.number().required("Enter phone number"),
+  address: Yup.object()
+    .default(null)
+    .nullable()
+    .shape({
+      city: Yup.string().required("Enter delivery city"),
+      country: Yup.string().required("Enter delivery country"),
+    }),
+});
 
 const ContactForm = () => {
-  const contactDetails = useSelector((state: RootState) => state.checkout.contact);
-  const dispatch = useDispatch<AppDispatch>()
+  const { contact, hasContact } = useSelector(
+    (state: RootState) => state.checkout
+  );
+  const dispatch = useDispatch<AppDispatch>();
+  const [toggle, setToggle] = useState(true);
+  const [isSaved, setIsSaved] = useState(false);
 
-  const { handleBlur, handleSubmit, handleChange, values, touched, errors } = useFormik({
-    initialValues: {
-      ...contactDetails,
-    },
+  const handleSubmit = (values: ContactDetails) => {
+    dispatch(addContactDetails(values));
+    console.log(values);
+    setIsSaved(true);
+  };
 
-    validationSchema: Yup.object({
-      name: Yup.string().required(),
-      email: Yup.string()
-        .email("Please enter a valid email")
-        .required("Please enter email"),
-      phone: Yup.number(),
-      address: Yup.object().default(null).nullable().shape({
-        city: Yup.string().required(),
-        country: Yup.string().required(),
-      }),
-    }),
+  const handleIsSaved = () => {
+    setIsSaved(false);
+  };
 
-    onSubmit: (values: ContactDetails) => {
-        dispatch(addContactDetails(values));
-    },
-  });
+  const handleToggle = () => {
+    setToggle(!toggle);
+  };
+
   return (
-    <form
-      className="grid gap-8 md:grid-cols-2 items-baseline w-[95%] pt-5 mx-auto"
-      onSubmit={handleSubmit}
-    >
-      <div className="w-full grid gap-4 py-5">
-        <IonRow className="border w-full px-2 rounded-xl  mx-auto">
-          <IonInput
-            name="name"
-            clearInput={true}
-            placeholder="Fullname"
-            value={userDetails.name}
-            onIonInput={onInput}
-            label="Fullname"
-            type="text"
-            labelPlacement="stacked"
-            required
-          ></IonInput>
-        </IonRow>
-        <IonRow className="border w-full px-2 rounded-xl mx-auto">
-          <IonInput
-            name="email"
-            clearInput={true}
-            placeholder="user@example.com"
-            value={userDetails.email}
-            onIonInput={onInput}
-            type="email"
-            label="Email"
-            labelPlacement="stacked"
-            required
-          ></IonInput>
-        </IonRow>
-        <IonRow className="border w-full px-2 rounded-xl mx-auto">
-          <IonInput
-            name="phone"
-            clearInput={true}
-            placeholder="Phone"
-            value={userDetails.phone}
-            onIonInput={onInput}
-            type="tel"
-            label="Phone"
-            labelPlacement="stacked"
-            required
-          ></IonInput>
-        </IonRow>
-        <IonRow className="border w-full px-2 rounded-xl mx-auto">
-          <IonInput
-            clearInput={true}
-            name="city"
-            placeholder="City"
-            value={userDetails?.address?.city}
-            onIonInput={onInput}
-            type="text"
-            label="City/State"
-            labelPlacement="stacked"
-            required
-          ></IonInput>
-        </IonRow>
-        <IonRow className="border w-full px-2 rounded-xl mx-auto">
-          <IonInput
-            clearInput={true}
-            placeholder="Country"
-            name="country"
-            value={userDetails?.address?.country}
-            onIonInput={onInput}
-            type="text"
-            label="Country"
-            labelPlacement="stacked"
-            required
-          ></IonInput>
-        </IonRow>
-        <IonButton
-          fill="solid"
-          expand="block"
-          type="submit"
-          color={"medium"}
-          className="gap-4 w-full rounded-sm p-0 mx-0"
-        >
-          <IonText className="flex p-0 px-4 m-0">Save</IonText>
-          {/* <IonIcon
-              size="small"
-              icon={arrowForward}
-              className="flex p-0 m-0"
-            ></IonIcon> */}
-          <IonRippleEffect></IonRippleEffect>
-        </IonButton>
-      </div>
-    </form>
+    <IonContent className="ion-padding">
+      <IonModal
+        trigger="open-contact"
+        initialBreakpoint={0.75}
+        breakpoints={[0, 0.25, 0.75, 0.9]}
+        handleBehavior="cycle"
+      >
+        <IonContent className="ion-padding">
+          <Formik
+            initialValues={contact}
+            validationSchema={ContactFormValidation}
+            onSubmit={handleSubmit}
+          >
+            {(formik) => (
+              <Form className="grid items-baseline w-[95%] py-2 mx-auto">
+                <FormHeader
+                  title={"Contact Details"}
+                  icon={false}
+                  isActive={toggle}
+                  toggle={handleToggle}
+                />
+                <div className={`w-full grid gap-4 py-5`}>
+                  <CustomInput
+                    handleIsSaved={handleIsSaved}
+                    id="name"
+                    name="name"
+                    placeholder="Fullname"
+                    label="Fullname"
+                  />
+                  <CustomInput
+                    handleIsSaved={handleIsSaved}
+                    id="email"
+                    name="email"
+                    placeholder="Email"
+                    label="Email"
+                    inputMode="text"
+                    type="email"
+                  />
+                  <CustomInput
+                    handleIsSaved={handleIsSaved}
+                    id="phone"
+                    name="phone"
+                    placeholder="Phone"
+                    label="Phone"
+                    inputMode="tel"
+                  />
+                  <CustomInput
+                    handleIsSaved={handleIsSaved}
+                    id="city"
+                    name="address.city"
+                    placeholder="City/State"
+                    label="City/State"
+                  />
+                  <CustomInput
+                    handleIsSaved={handleIsSaved}
+                    id="country"
+                    name="address.country"
+                    placeholder="Country"
+                    label="Country"
+                  />
+
+                  {!isSaved && (
+                    <IonButton
+                      fill="solid"
+                      expand="block"
+                      type="submit"
+                      color={"medium"}
+                      disabled={isSaved}
+                      className="relative gap-4 w-full rounded-sm px-2 mx-0 normal-case"
+                    >
+                      <IonText className="flex p-0 px-4 py-2 m-0">
+                        {isSaved ? "Saved" : "Save"}
+                      </IonText>
+                    </IonButton>
+                  )}
+                </div>
+              </Form>
+            )}
+          </Formik>
+        </IonContent>
+      </IonModal>
+    </IonContent>
   );
 };
 

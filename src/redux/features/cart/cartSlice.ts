@@ -47,7 +47,7 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
 
-    decrementItem: (state, action: PayloadAction<number>) => {
+    'decrementItem': (state, action: PayloadAction<number>) => {
       const existingProduct = state.products.find(
         (product) => product.id == action.payload
       );
@@ -76,12 +76,12 @@ const cartSlice = createSlice({
         state.count -= 1;
       }
     },
-    deleteItem: (state, action: PayloadAction<number>) => {
+    'deleteItem': (state, action: PayloadAction<number>) => {
       const product = state.products.find((v) => v.id == action.payload);
       state.products = state.products.filter((v) => v.id !== product.id);
       state.count -= product.count;
     },
-    clearCart: (state) => {
+    'clearCart': (state) => {
       state.products = [];
       state.count = 0;
     },

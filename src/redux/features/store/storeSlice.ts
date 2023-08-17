@@ -40,8 +40,11 @@ const storeSlice = createSlice({
       state.error = "";
     });
     builder.addCase(fetchProducts.rejected, (state, action) => {
+      const error = action.error.message?.match(/network|timeout/)
+        ? "There a network error, please check your connection and try again"
+        : action.error.message;
       state.loading = false;
-      state.error = action.error.message || "error fetching products";
+      state.error = error|| "Error getting products";
     });
   },
 });
