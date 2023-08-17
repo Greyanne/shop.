@@ -1,19 +1,26 @@
 import { IonLoading } from "@ionic/react";
-import { useState } from "react";
 interface LoaderProps {
+  infinite?: boolean;
   showLoading: boolean;
-  setShowLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowLoading?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Loader: React.FC<LoaderProps> = ({ showLoading, setShowLoading }) => {
+const Loader: React.FC<LoaderProps> = ({
+  showLoading,
+  setShowLoading,
+  infinite,
+}) => {
   return (
-    <IonLoading
+    <div className="container">
+      <IonLoading
       cssClass="my-custom-class"
       isOpen={showLoading}
-      onDidDismiss={() => setShowLoading(false)}
+      onDidDismiss={() => setShowLoading && setShowLoading(false)}
       message={"Please wait..."}
-      duration={1000}
+      // duration={!infinite ? 1000 : undefined}
     />
+    </div>
+    
   );
 };
 

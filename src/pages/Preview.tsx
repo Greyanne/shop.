@@ -8,13 +8,15 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { useContext, useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import { RouteComponentProps } from "react-router";
-import { StoreContext } from "../context/store_context";
 import Loader from "../components/Loader";
-import { Product } from "../components/ProductsContainer";
 import ImageComponent from "../components/ImageComponent";
-import { CartContext } from "../context/cart_context";
+import baseUrl from "../utils/baseUrl";
+import  { AppDispatch } from "../redux/store";
+import { addItem } from "../redux/features/cart/cartSlice";
+import { Product } from "../types";
+import { useDispatch } from "react-redux";
 
 interface PreviewPageProps
   extends RouteComponentProps<{
@@ -22,24 +24,24 @@ interface PreviewPageProps
   }> {}
 
 const PreviewPage: React.FC<PreviewPageProps> = ({ match }) => {
-  const { fetchSingleProduct } = useContext(StoreContext);
-  const { addToCart } = useContext(CartContext);
   const [showLoading, setShowLoading] = useState(false);
   const [product, setProduct] = useState<Product | null>(null);
   const { id } = match.params;
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleAddToCart = () => {
-    addToCart(Number(id));
+    dispatch(addItem(Number(id)));
   };
 
   useEffect(() => {
-    setShowLoading(true);
-    fetchSingleProduct(Number(id))
-      .then((res) => {
-        setProduct(res);
+    const fetchProduct = () => {
+      setShowLoading(true);
+      return baseUrl.get(`${id}`).then((response) => {
+        setProduct(response.data);
         setShowLoading(false);
-      })
-      .catch((error) => console.log("error fetching product", error));
+      });
+    };
+    fetchProduct();
   }, [id]);
 
   useEffect(() => {
@@ -56,9 +58,7 @@ const PreviewPage: React.FC<PreviewPageProps> = ({ match }) => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle className="whitespace-normal">
-            Product
-          </IonTitle>
+          <IonTitle className="whitespace-normal">Product</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
@@ -70,34 +70,31 @@ const PreviewPage: React.FC<PreviewPageProps> = ({ match }) => {
           </IonToolbar>
         </IonHeader>
         <div className="flex flex-wrap gap-4 md:gap-8 px-4 justify-center my-6">
-          <p className="text-lg font-bold my-2 md:hidden flex-2">
-            {product && product.title}
-          </p>
           <div className="w-full min-w-[40%] md:w-[40%] flex-2">
             <ImageComponent product={product} />
           </div>
           <div className="flex flex-wrap md:w-[40%] h-fit justify-start items-start gap-4">
-            <p className="hidden text-lg font-bold md:flex w-full">
+            <p className="text-lg font-bold md:flex w-full">
               {product && product.title}
             </p>
-           
+
             <div className="min-w-[40%] flex-1 p-0 sm:self-end">
-              <IonLabel>
-                <h2>Category</h2>
-                <IonNote className="capitalize p-0">{product.category}</IonNote>
-              </IonLabel>
-            </div> 
+              <h1 className="text-2xl font-extrabold">${product.price}</h1>
+            </div>
+
             <IonButton
-              fill="outline"
-              color="primary"
-              className="border-white"
-              onClick={() => handleAddToCart()}
+              color={"white"}
+              onClick={handleAddToCart}
+              className="sm:block z-50 font-medium normal-case tracking-tight min-w-fit max-w-fit rounded-lg flex-1 h-5 self-center text-black bg-[whitesmoke]"
             >
-              Add to Cart
+              Add to cart
             </IonButton>
             <div className="border-0 shadow-transparent self-stretch bg-transparent p-0 outline-none sm:self-end w-[40%]">
               <IonLabel>
-                <h1 className="text-4xl">${product.price}</h1>
+                <h2>Category</h2>
+                <IonNote className="capitalize p-0 py-1">
+                  {product.category}
+                </IonNote>
               </IonLabel>
             </div>
 

@@ -1,51 +1,20 @@
-import {
-  IonButton,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardSubtitle,
-  IonGrid,
-  IonIcon,
-  IonImg,
-  IonRippleEffect,
-  IonRow,
-  IonSearchbar,
-} from "@ionic/react";
-import React, { useContext, useEffect, useState } from "react";
-import { StoreContext } from "../context/store_context";
-import { cart, heart, heartOutline } from "ionicons/icons";
+import { IonSearchbar } from "@ionic/react";
+import React, { useEffect, useState } from "react";
 import Loader from "./Loader";
-import EmptyContainer from "./EmptyContainer";
-import ImageComponent from "./ImageComponent";
-import { CartContext } from "../context/cart_context";
-
-export interface Product {
-  title: string;
-  image: string;
-  price: string;
-  description: string;
-  id: number;
-  category: string;
-}
+import ProductGallery from "./ProductGallery";
+import { Product } from "../types";
+import store, { RootState } from "../redux/store";
+import { fetchProducts } from "../redux/features/store/storeSlice";
+import { useSelector } from "react-redux";
+import EmptyContainer from "./ErrorContainer";
 
 const ProductsContainer: React.FC = () => {
-  const { products } = useContext(StoreContext);
-  const [data, setData] = useState<Product[] | []>([...products]);
+  const [products, setProducts] = useState<Product[] | []>([]);
+  const [data, setData] = useState<Product[] | []>([]);
   const [searchValue, setSearchValue] = useState("");
-  const [loading, setLoading] = useState(false);
-  const { addToCart } = useContext(CartContext);
-
-  const handleAddToCart = (
-    e: React.MouseEvent<HTMLIonButtonElement, MouseEvent>,
-    id: number
-  ) => {
-    e.preventDefault();
-    e.stopPropagation();
-    addToCart(id);
-  };
+  const { loading, error } = useSelector((state: RootState) => state.shop);
 
   const handleClear = () => {
-    setLoading(true);
     setData([...products]);
     setSearchValue("");
   };
@@ -58,7 +27,7 @@ const ProductsContainer: React.FC = () => {
   };
 
   const handleSearch = (event: Event) => {
-    setLoading(true);
+    // setLoading(true);
     let query = "";
     const target = event.target as HTMLIonSearchbarElement;
     if (target) {
@@ -68,9 +37,10 @@ const ProductsContainer: React.FC = () => {
   };
 
   useEffect(() => {
-    console.log({ products });
-    if (products) {
+    if (products && products.length > 0) {
       setData([...products]);
+    } else {
+      store.dispatch(fetchProducts());
     }
   }, [products]);
 
@@ -80,9 +50,20 @@ const ProductsContainer: React.FC = () => {
     }
   }, [searchValue]);
 
+  useEffect(() => {
+    const unsubscribe = store.subscribe(() => {
+      let { products: productStore } = store.getState().shop;
+      setProducts(productStore);
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
   return (
-    <div className="my-5 px-4 min-h-[70%]">
-      <p className="text-lg font-bold my-5">Products</p>
+    <div className="my-5 px-2 mx-auto min-h-[70%]">
+      <p className="text-2xl px-4 font-bold my-5">Products</p>
       <IonSearchbar
         placeholder="Search products..."
         debounce={1000}
@@ -90,7 +71,7 @@ const ProductsContainer: React.FC = () => {
         onIonInput={handleSearch}
         onIonClear={handleClear}
         show-clear-button="focus"
-        className="w-full p-0 max-w-[980px] mx-auto"
+        className="w-full p-4 max-w-[1440px] mx-auto"
       ></IonSearchbar>
       {searchValue && (
         <p className="text-sm italic">
@@ -100,86 +81,13 @@ const ProductsContainer: React.FC = () => {
       )}
 
       {loading ? (
-        <Loader setShowLoading={setLoading} showLoading={loading} />
-      ) : data.length <= 0 ? (
-        <EmptyContainer />
+        <Loader showLoading={loading} />
+      ) : error ? (
+        <>
+          <EmptyContainer message={error} />
+        </>
       ) : (
-        <div>
-          <IonGrid className="p-0 my-5 mx-auto max-w-[980px]">
-            <IonRow className="grid grid-cols-products justify-start py-4 gap-4">
-              {data.map((product, index) => (
-                <IonCard
-                  key={index}
-                  href={`/preview/${product.id}`}
-                  // onClick={(e) => e.preventDefault()}
-                  // routerLink={`/preview/${product.id}`}
-                  className="flex flex-col p-0 m-0 mx-auto justify-between gap-4 max-w-[300px] xs:min-w-[MIN(120px, 50%)] cursor-pointer"
-                >
-                  <ImageComponent product={product} />
-                  <div className="flex flex-wrap gap-1 justify-between p-4 pb-5 items-stretch min-h-[100px] sm:min-h-[150px]">
-                    <IonCardHeader className="p-0 m-0 w-[100%] flex-2">
-                      <IonCardSubtitle className="text-sm sm:text-lg font-normal text-ellipsis normal-case line-clamp-2">
-                        {product.title}
-                      </IonCardSubtitle>
-                    </IonCardHeader>
-
-                    <IonCardContent className="p-0 py-2 font-medium flex-1 self-end">
-                      ${product.price}
-                    </IonCardContent>
-
-                    <IonButton
-                      color={"white"}
-                      onClick={(e) => handleAddToCart(e, product.id)}
-                      className="hidden sm:block z-50 font-medium normal-case tracking-tight min-w-fit max-w-fit rounded-lg flex-1 h-5 self-center text-black bg-[whitesmoke]"
-                    >
-                      Add to cart
-                    </IonButton>
-                  </div>
-                </IonCard>
-              ))}
-
-              <IonCard
-                routerLink="/products/preview"
-                className="flex flex-col p-0 m-0 justify-around max-w-[300px] xs:min-w-[46%] aspect-[5/8] cursor-pointer"
-              >
-                <div className="relative h-[100%]">
-                  <img
-                    alt="Silhouette of mountains"
-                    src={
-                      "https://ionicframework.com/docs/img/demos/card-media.png"
-                    }
-                    className="h-[100%] m-auto aspect-[5/6] bg-white rounded object-center object-contain p-2"
-                  />
-                  <div
-                    aria-label="Add to cart"
-                    aria-describedby="heart-icon"
-                    className="absolute overflow-hidden ion-activatable text-black bg-[whitesmoke] right-1 bottom-1 z-10 p-0 h-30 w-30 border border-primary cursor-pointer rounded-[100%] flex justify-center items-center"
-                  >
-                    <IonRippleEffect></IonRippleEffect>
-                    <IonIcon
-                      icon={heartOutline}
-                      id="heart-icon"
-                      size="small"
-                      className="p-2 m-auto"
-                    />
-                  </div>
-                </div>
-
-                <div className="flex flex-col gap-1 justify-end p-4 pb-5 h-[100px] sm:h-[150px]">
-                  <IonCardHeader className="p-0 m-0 ">
-                    <IonCardSubtitle className="text-sm sm:text-lg font-normal text-ellipsis normal-case line-clamp-2">
-                      Title
-                    </IonCardSubtitle>
-                  </IonCardHeader>
-
-                  <IonCardContent className="p-0 font-medium">
-                    $99
-                  </IonCardContent>
-                </div>
-              </IonCard>
-            </IonRow>
-          </IonGrid>
-        </div>
+        <ProductGallery data={data} />
       )}
     </div>
   );

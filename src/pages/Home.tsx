@@ -19,9 +19,9 @@ const Home: React.FC = () => {
         </IonToolbar>
       </IonHeader> */}
       <IonContent fullscreen className="px-2">
-        <IonHeader collapse="condense" translucent className="py-0 my-10 mb-5">
+        <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large" className="break-words">
+            <IonTitle size="large">
               {getGreeting()}
             </IonTitle>
           </IonToolbar>
