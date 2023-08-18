@@ -15,7 +15,7 @@ const ErrorContainer: React.FC<Props> = ({ message }) => {
         color={"medium"}
         className="rounded-lg tracking-tight h-12 leading-10 p-2 px-4 normal-case leading-tighter"
       >
-        Try again
+        Go back home
       </IonButton>
     </div>
   );

@@ -17,7 +17,7 @@ const Loader: React.FC<LoaderProps> = ({
       isOpen={showLoading}
       onDidDismiss={() => setShowLoading && setShowLoading(false)}
       message={"Please wait..."}
-      // duration={!infinite ? 1000 : undefined}
+      duration={!infinite ? 3000 : undefined}
     />
     </div>
     

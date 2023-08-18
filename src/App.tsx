@@ -10,8 +10,14 @@ import {
   setupIonicReact,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { cartOutline, homeOutline, square } from "ionicons/icons";
-import Tab3 from "./pages/Tab3";
+import {
+  cart,
+  cartOutline,
+  heart,
+  heartOutline,
+  home,
+  homeOutline,
+} from "ionicons/icons";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -41,27 +47,32 @@ import "./theme/tailwind.css";
 import Home from "./pages/Home";
 import Cart from "./pages/Cart";
 import PreviewPage from "./pages/Preview";
-import { useEffect, useState } from "react";
-import store, { RootState } from "./redux/store";
+import { RootState } from "./redux/store";
 import { useSelector } from "react-redux";
 import Checkout from "./pages/Checkout";
-import CartLayout from "./pages/CartLayout";
+import Wishlist from "./pages/Wishlist";
+import { useState } from "react";
 
 setupIonicReact();
 
 const App: React.FC = () => {
   const cartCount = useSelector((state: RootState) => state.cart.count);
+  const [activeTab, setActiveTab] = useState("home"); // Set the initial active tab
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab);
+  };
+
   return (
     <IonApp>
       <IonReactRouter>
-        <IonTabs>
+        <IonTabs onIonTabsDidChange={(e) => handleTabChange(e.detail.tab)}>
           <IonRouterOutlet>
-            <Route exact path="/home" component={Home}/>
+            <Route exact path="/home" component={Home} />
             <Route exact path="/preview/:id" component={PreviewPage} />
             <Route exact path="/cart" component={Cart} />
             <Route exact path="/checkout" component={Checkout} />
-            <Route path="/tab3" component={Tab3}/>
-            <Route exact path="/" component={Home}/>
+            <Route path="/wishlist" component={Wishlist} />
+            <Route exact path="/" component={Home} />
           </IonRouterOutlet>
 
           <IonTabBar
@@ -69,13 +80,16 @@ const App: React.FC = () => {
             className="flex w-[90%] g:w-[85%] rounded-lg p-2 m-auto mb-5 h-[3em]"
           >
             <IonTabButton tab="home" href="/home">
-              <IonIcon aria-hidden="true" icon={homeOutline} />
+              <IonIcon
+                aria-hidden="true"
+                icon={activeTab === "home" ? home : homeOutline}
+              />
               <IonLabel>Home</IonLabel>
             </IonTabButton>
             <IonTabButton tab="cart" href="/cart">
               <IonIcon
                 aria-hidden="true"
-                icon={cartOutline}
+                icon={activeTab === "cart" ? cart : cartOutline}
                 className="relative"
               />
               {cartCount > 0 && (
@@ -85,9 +99,12 @@ const App: React.FC = () => {
               )}
               <IonLabel>Cart</IonLabel>
             </IonTabButton>
-            <IonTabButton tab="tab3" href="/tab3">
-              <IonIcon aria-hidden="true" icon={square} />
-              <IonLabel>Tab 3</IonLabel>
+            <IonTabButton tab="wishlist" href="/wishlist">
+              <IonIcon
+                aria-hidden="true"
+                icon={activeTab === "wishlist" ? heart : heartOutline}
+              />
+              <IonLabel>Wishlist</IonLabel>
             </IonTabButton>
           </IonTabBar>
         </IonTabs>

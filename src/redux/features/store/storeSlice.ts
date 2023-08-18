@@ -49,5 +49,5 @@ const storeSlice = createSlice({
   },
 });
 
-// export const { fetchProducts } = storeSlice.actions;
+
 export default storeSlice.reducer;
