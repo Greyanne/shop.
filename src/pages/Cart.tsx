@@ -25,7 +25,7 @@ const Cart: React.FC = () => {
           <IonTitle>Cart</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen>
+      <IonContent fullscreen={true}>
         <IonHeader collapse="condense">
           <IonToolbar>
             <IonTitle size="large">Cart</IonTitle>

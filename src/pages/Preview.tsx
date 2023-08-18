@@ -8,12 +8,12 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import {  useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { RouteComponentProps } from "react-router";
 import Loader from "../components/Loader";
 import ImageComponent from "../components/ImageComponent";
 import baseUrl from "../utils/baseUrl";
-import  { AppDispatch } from "../redux/store";
+import { AppDispatch } from "../redux/store";
 import { addItem } from "../redux/features/cart/cartSlice";
 import { Product } from "../types";
 import { useDispatch } from "react-redux";
@@ -56,7 +56,7 @@ const PreviewPage: React.FC<PreviewPageProps> = ({ match }) => {
 
   return (
     <IonPage>
-      <IonHeader>
+      {/* <IonHeader>
         <IonToolbar>
           <IonTitle className="whitespace-normal">Product</IonTitle>
         </IonToolbar>
@@ -67,8 +67,16 @@ const PreviewPage: React.FC<PreviewPageProps> = ({ match }) => {
             <IonTitle size="large" className="whitespace-normal">
               Product
             </IonTitle>
+          </IonToolbar> */}
+      <IonContent fullscreen className="px-2">
+        <IonHeader collapse="condense">
+          <IonToolbar>
+            <IonTitle size="large" className="whitespace-normal">
+              Product
+            </IonTitle>
           </IonToolbar>
         </IonHeader>
+
         <div className="flex flex-wrap gap-4 md:gap-8 px-4 justify-center my-6">
           <div className="w-full min-w-[40%] md:w-[40%] flex-2">
             <ImageComponent product={product} />

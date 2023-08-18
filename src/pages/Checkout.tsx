@@ -4,7 +4,6 @@ import {
   IonContent,
   IonHeader,
   IonPage,
-  IonText,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
@@ -12,7 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store";
 import ContactForm from "../components/ContactForm";
 import CardForm from "../components/CardForm";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { OPEN_CARD, OPEN_CONTACT } from "../utils/constants";
 import FormHeader from "../components/FormHeader";
 import SuccessContainer from "../components/SuccessContainer";
@@ -20,6 +19,7 @@ import OrderSummary from "../components/OrderSummary";
 import { Alert } from "../types";
 import EmptyCart from "../components/EmptyCart";
 import { checkout } from "../redux/features/cart/cartSlice";
+import Loader from "../components/Loader";
 
 const initialAlertState = {
   show: false,
@@ -35,6 +35,7 @@ const Checkout: React.FC = () => {
   const cardRef = useRef<HTMLDivElement | null>(null);
   const successRef = useRef<HTMLDivElement | null>(null);
   const [showAlert, setShowAlert] = useState<Alert>(initialAlertState);
+  const [showLoading, setShowLoading] = useState(false);
 
   const handleBuy = () => {
     if (!hasCard || !hasContact) {
@@ -46,11 +47,14 @@ const Checkout: React.FC = () => {
         message,
       });
     } else {
-      handleModal();
-      //adding checkout call here to give a sense of async call
-      dispatch(checkout({ products, contact }));
+      setShowLoading(true);
 
-      console.log("Good to go!");
+      setTimeout(() => {
+        //adding timeout call here to give a mock of async API call
+        handleModal();
+        dispatch(checkout({ products, contact }));
+        console.log("Good to go!");
+      }, 3000);
     }
   };
 
@@ -66,13 +70,14 @@ const Checkout: React.FC = () => {
       case OPEN_CARD:
         return cardRef.current?.click();
       default:
+        setShowLoading(false);
         return successRef.current?.click();
     }
   };
 
   return (
     <IonPage>
-      <IonHeader>
+      {/* <IonHeader>
         <IonToolbar>
           <IonTitle>{`Cart | Checkout`}</IonTitle>
         </IonToolbar>
@@ -81,6 +86,12 @@ const Checkout: React.FC = () => {
         <IonHeader collapse="condense">
           <IonToolbar>
             <IonTitle size="large">{`Cart | Checkout`}</IonTitle>
+          </IonToolbar>
+        </IonHeader> */}
+        <IonContent fullscreen className="px-2">
+        <IonHeader collapse="condense">
+          <IonToolbar>
+             <IonTitle size="large">{`Cart | Checkout`}</IonTitle>
           </IonToolbar>
         </IonHeader>
         <div id="open-success" ref={successRef}></div>
@@ -140,6 +151,7 @@ const Checkout: React.FC = () => {
         ) : (
           <EmptyCart />
         )}
+        <Loader showLoading={showLoading} />
 
         {/* Modals */}
         <ContactForm />
