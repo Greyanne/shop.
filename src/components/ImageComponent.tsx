@@ -1,26 +1,33 @@
 import { IonIcon, IonImg, IonRippleEffect } from "@ionic/react";
-import { useState } from "react";
-import { heartOutline } from "ionicons/icons";
-import { addItem } from "../redux/features/cart/cartSlice";
+import { useMemo, useState } from "react";
+import { heart, heartOutline } from "ionicons/icons";
 import { Product } from "../types";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch } from "../redux/store";
+import { AppDispatch, RootState } from "../redux/store";
 import CustomLoading from "./CustomLoading";
+import { toggleWishlist } from "../redux/features/store/storeSlice";
 
-const ImageComponent: React.FC<{ product: Product}> = ({ product}) => {
+const ImageComponent: React.FC<{ product: Product }> = ({ product }) => {
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch<AppDispatch>();
+  const { wishlist } = useSelector((state: RootState) => state.shop);
 
   const handleImageOnLoad = () => {
     setLoading(false);
   };
 
-  const handleAddToCart = (
+  const isInWishlist = useMemo(() => {
+    return wishlist.indexOf(product.id) > -1 ? true : false;
+  }, [wishlist, product.id]);
+
+  const handleWishlist = (
     e: React.MouseEvent<HTMLIonIconElement, MouseEvent>
   ) => {
     e.preventDefault();
     e.stopPropagation();
-    product.id && dispatch(addItem(product.id));
+    if (product.id) {
+      dispatch(toggleWishlist(product.id))
+    }
   };
 
   return (
@@ -43,11 +50,12 @@ const ImageComponent: React.FC<{ product: Product}> = ({ product}) => {
       >
         <IonRippleEffect></IonRippleEffect>
         <IonIcon
-          icon={heartOutline}
+          icon={isInWishlist ? heart : heartOutline}
+          color={isInWishlist ? "danger" : ""}
           id="heart-icon"
           size="small"
           className="p-2 m-auto z-50"
-          onClick={handleAddToCart}
+          onClick={handleWishlist}
         />
       </div>
     </div>

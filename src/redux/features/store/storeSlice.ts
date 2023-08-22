@@ -29,7 +29,20 @@ export const fetchProducts = createAsyncThunk(
 const storeSlice = createSlice({
   name: "store",
   initialState,
-  reducers: {},
+  reducers: {
+    toggleWishlist: (state, action: PayloadAction<number>) => {
+      if (!state.wishlist.find((item) => item == action.payload)) {
+        state.wishlist = [...state.wishlist, action.payload];
+      } else {
+        state.wishlist = [
+          ...state.wishlist.filter((item) => item != action.payload),
+        ];
+      }
+    },
+    clearWishlist: (state) => {
+      state.wishlist = [];
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchProducts.pending, (state) => {
       state.loading = true;
@@ -44,10 +57,12 @@ const storeSlice = createSlice({
         ? "There a network error, please check your connection and try again"
         : action.error.message;
       state.loading = false;
-      state.error = error|| "Error getting products";
+      state.error = error || "Error getting products";
     });
   },
 });
 
+export const {toggleWishlist, clearWishlist } =
+  storeSlice.actions;
 
 export default storeSlice.reducer;
