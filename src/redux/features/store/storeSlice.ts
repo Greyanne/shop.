@@ -31,11 +31,15 @@ const storeSlice = createSlice({
   initialState,
   reducers: {
     toggleWishlist: (state, action: PayloadAction<number>) => {
-      if (!state.wishlist.find((item) => item == action.payload)) {
-        state.wishlist = [...state.wishlist, action.payload];
+      if (!state.wishlist.find((product) => product.id == action.payload)) {
+        const product = state.products.find(
+          (product) => product.id === action.payload
+        );
+        state.wishlist = [...state.wishlist, product];
       } else {
+        console.log('remove item')
         state.wishlist = [
-          ...state.wishlist.filter((item) => item != action.payload),
+          ...state.wishlist.filter((product) => product.id !== action.payload),
         ];
       }
     },
@@ -62,7 +66,6 @@ const storeSlice = createSlice({
   },
 });
 
-export const {toggleWishlist, clearWishlist } =
-  storeSlice.actions;
+export const { toggleWishlist, clearWishlist } = storeSlice.actions;
 
 export default storeSlice.reducer;

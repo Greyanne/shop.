@@ -9,7 +9,7 @@ const EmptyCart: React.FC = () => {
       <p>
        You have no item in your cart
       </p>
-      <IonButton href="/" fill="outline" color="medium" className="my-5 normal-case text-sm h-12 rounded-lg">Start shopping now</IonButton>
+      <IonButton href="/" color="medium" className="my-5 normal-case text-sm h-12 rounded-lg tracking-normal">Start shopping now</IonButton>
     </div>
   );
 };

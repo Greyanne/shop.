@@ -17,7 +17,7 @@ const ImageComponent: React.FC<{ product: Product }> = ({ product }) => {
   };
 
   const isInWishlist = useMemo(() => {
-    return wishlist.indexOf(product.id) > -1 ? true : false;
+    return wishlist.find(item=>item.id === product.id)
   }, [wishlist, product.id]);
 
   const handleWishlist = (

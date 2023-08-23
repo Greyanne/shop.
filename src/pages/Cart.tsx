@@ -20,11 +20,11 @@ const Cart: React.FC = () => {
   const cartCount = useSelector((state: RootState) => state.cart.count);
   return (
     <IonPage>
-      <IonHeader>
+      {/* <IonHeader>
         <IonToolbar>
           <IonTitle>Cart</IonTitle>
         </IonToolbar>
-      </IonHeader>
+      </IonHeader> */}
       <IonContent fullscreen={true}>
         <IonHeader collapse="condense">
           <IonToolbar>
@@ -33,6 +33,9 @@ const Cart: React.FC = () => {
         </IonHeader>
 
         <div className="max-w-[95%] mx-auto flex flex-wrap gap-4 gap-y-1 xs:justify-start sm:justify-center">
+          <h1 className="text-2xl mr-auto text-left px-0 font-bold my-5">
+            Cart
+          </h1>
           {cartCount <= 0 ? (
             <EmptyCart />
           ) : (
