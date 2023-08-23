@@ -1,5 +1,9 @@
 # eShop App Documentation
 
+## Live Demo
+- [eShop](https://dashboard.ionicframework.com/preview/82adc52f/vjx45vtk2r)
+
+
 ## Introduction
 
 Welcome to eShop, a simple e-commerce app that holds the potential to become a tangible solution for real-world users (let's just have a chuckle over the name, shall we?). I took on eShop as a learning project to explore some technologies I haven't worked with previously.
