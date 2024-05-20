@@ -1,7 +1,7 @@
 # eShop App Documentation
 
 ## Live Demo
-- [eShop](https://dashboard.ionicframework.com/preview/82adc52f/vjx45vtk2r)
+- [eShop](eshopbyifechi.vercel.app)
 
 
 ## Introduction
