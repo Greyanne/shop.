@@ -61,6 +61,7 @@ const App: React.FC = () => {
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
   };
+  const { wishlist } = useSelector((state: RootState) => state.shop);
 
   return (
     <IonApp>
@@ -104,6 +105,11 @@ const App: React.FC = () => {
                 aria-hidden="true"
                 icon={activeTab === "wishlist" ? heart : heartOutline}
               />
+              {wishlist.length > 0 && (
+                <div className="absolute flex justify-center items-center rounded-full p-0 top-0 ml-5 h-4 w-4 left-19 bg-red-400 text-red-white">
+                  <p className="text-white m-0 p-0">{wishlist.length}</p>
+                </div>
+              )}
               <IonLabel>Wishlist</IonLabel>
             </IonTabButton>
           </IonTabBar>
