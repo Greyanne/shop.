@@ -1,5 +1,7 @@
 import {
+  IonBackButton,
   IonButton,
+  IonButtons,
   IonContent,
   IonHeader,
   IonLabel,
@@ -56,28 +58,19 @@ const PreviewPage: React.FC<PreviewPageProps> = ({ match }) => {
 
   return (
     <IonPage>
-      {/* <IonHeader>
+      <IonHeader>
         <IonToolbar>
-          <IonTitle className="whitespace-normal">Product</IonTitle>
+          <IonButtons slot="start">
+            <IonBackButton></IonBackButton>
+          </IonButtons>
+          <IonTitle>Product Preview</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen>
-        <IonHeader collapse="condense" className="py-0 mb-2 ">
-          <IonToolbar>
-            <IonTitle size="large" className="whitespace-normal">
-              Product
-            </IonTitle>
-          </IonToolbar> */}
       <IonContent fullscreen className="px-2">
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large" className="whitespace-normal">
-              Product
-            </IonTitle>
-          </IonToolbar>
-        </IonHeader>
-
-        <div className="flex flex-wrap gap-4 md:gap-8 px-4 justify-center my-6">
+        <div className="flex flex-wrap gap-4 md:gap-8 px-4 justify-center">
+          <h1 className="text-2xl mr-auto text-left px-0 font-bold my-5">
+            Product Preview
+          </h1>
           <div className="w-full min-w-[40%] md:w-[40%] flex-2">
             <ImageComponent product={product} />
           </div>

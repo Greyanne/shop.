@@ -35,7 +35,6 @@ const Home: React.FC = () => {
   };
 
   const handleSearch = (event: Event) => {
-    // setLoading(true);
     let query = "";
     const target = event.target as HTMLIonSearchbarElement;
     if (target) {
